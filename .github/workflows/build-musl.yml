@@ -14,20 +14,22 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build python3 curl gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          sudo apt-get install -y ninja-build python3 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
-      - name: Download gn
+      - name: Build gn
         run: |
-          curl -LO https://chrome-infra-packages.appspot.com/dl/gn/gn/linux-amd64/+/latest
-          unzip latest -d gn-bin
-          chmod +x gn-bin/gn
-          echo "$PWD/gn-bin" >> $GITHUB_PATH
+          git clone --depth 1 https://gn.googlesource.com/gn
+          cd gn
+          python3 build/gen.py
+          ninja -j$(nproc) -C out
+          sudo cp out/gn /usr/local/bin/
+          gn --version
 
       - name: Install Rust (aarch64-musl)
         run: |
           rustup target add aarch64-unknown-linux-musl
 
-      - name: Build
+      - name: Build Obscura
         run: |
           export CC_aarch64_unknown_linux_musl=aarch64-linux-gnu-gcc
           export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
