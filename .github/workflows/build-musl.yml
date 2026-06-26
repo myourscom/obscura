@@ -14,7 +14,14 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y gcc-aarch64-linux-gnu ninja-build gn
+          sudo apt-get install -y ninja-build python3 curl
+
+      - name: Download gn
+        run: |
+          curl -LO https://chrome-infra-packages.appspot.com/dl/gn/gn/linux-amd64/+/latest
+          unzip latest -d gn-bin
+          chmod +x gn-bin/gn
+          echo "$PWD/gn-bin" >> $GITHUB_PATH
 
       - name: Install Rust (aarch64-musl)
         run: |
