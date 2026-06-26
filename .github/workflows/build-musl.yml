@@ -14,7 +14,14 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build python3 pkg-config libglib2.0-dev gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+          sudo apt-get install -y ninja-build python3 pkg-config libglib2.0-dev
+
+      - name: Install musl toolchain
+        run: |
+          curl -LO https://musl.cc/aarch64-linux-musl-cross.tgz
+          tar xzf aarch64-linux-musl-cross.tgz
+          echo "$PWD/aarch64-linux-musl-cross/bin" >> $GITHUB_PATH
+          aarch64-linux-musl-gcc --version
 
       - name: Install gn
         run: |
@@ -32,8 +39,8 @@ jobs:
 
       - name: Build Obscura
         run: |
-          export CC_aarch64_unknown_linux_musl=aarch64-linux-gnu-gcc
-          export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-gnu-gcc
+          export CC_aarch64_unknown_linux_musl=aarch64-linux-musl-gcc
+          export CARGO_TARGET_AARCH64_UNKNOWN_LINUX_MUSL_LINKER=aarch64-linux-musl-gcc
           export V8_FROM_SOURCE=1
           cargo build --release --target aarch64-unknown-linux-musl --bin obscura --bin obscura-worker
 
