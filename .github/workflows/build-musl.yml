@@ -14,7 +14,7 @@ jobs:
       - name: Install deps
         run: |
           sudo apt-get update
-          sudo apt-get install -y ninja-build python3 curl
+          sudo apt-get install -y ninja-build python3 curl gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
       - name: Download gn
         run: |
