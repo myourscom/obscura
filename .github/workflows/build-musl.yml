@@ -16,10 +16,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ninja-build python3 gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
 
-      - name: Build gn
+      - name: Install gn
         run: |
           git clone --depth 1 https://gn.googlesource.com/gn
           cd gn
+          git fetch --unshallow 2>/dev/null || true
           python3 build/gen.py
           ninja -j$(nproc) -C out
           sudo cp out/gn /usr/local/bin/
