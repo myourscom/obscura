@@ -18,10 +18,10 @@ jobs:
 
       - name: Install gn
         run: |
-          pip install gclient 2>/dev/null || true
           git clone --depth 1 https://gn.googlesource.com/gn /tmp/gn
           cd /tmp/gn
           python3 build/gen.py --no-last-commit-position
+          echo '// dummy' > out/last_commit_position.h
           ninja -j$(nproc) -C out
           sudo cp out/gn /usr/local/bin/
           gn --version
