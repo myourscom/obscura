@@ -21,7 +21,7 @@ jobs:
           git clone --depth 1 https://gn.googlesource.com/gn /tmp/gn
           cd /tmp/gn
           python3 build/gen.py --no-last-commit-position
-          echo '// dummy' > out/last_commit_position.h
+          printf '#define LAST_COMMIT_POSITION_NUM 0\n#define LAST_COMMIT_POSITION "0"\n' > out/last_commit_position.h
           ninja -j$(nproc) -C out
           sudo cp out/gn /usr/local/bin/
           gn --version
